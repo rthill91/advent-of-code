@@ -1,14 +1,19 @@
-def part1():
+import copy
+
+
+def part1(instructions=None, noun=12, verb=2):
     opcodes = {
         1: _add,
         2: _multiply,
     }
 
-    with open('input') as fh:
-        instructions = [int(inst) for inst in fh.readline().split(',')]
+    part2 = True
+    if not instructions:
+        part2 = False
+        instructions = _get_input()
 
-    instructions[1] = 12
-    instructions[2] = 2
+    instructions[1] = noun
+    instructions[2] = verb
     index = 0
     while index < len(instructions):
         inst = instructions[index]
@@ -17,23 +22,39 @@ def part1():
         op = opcodes.get(inst, None)
         op(index, instructions)
         index += 4
-    print(instructions)
+
+
+    if not part2:
+        print(instructions[0])
+    return instructions[0]
 
 
 
 def part2():
-    raise NotImplementedError
+    instructions = _get_input()
+
+    for noun in range(100):
+        for verb in range(100):
+            res = part1(copy.copy(instructions), noun, verb)
+            if res == 19690720:
+                print(100 * noun + verb)
+                return
 
 
 def _add(index, instructions):
-    oper1 = instructions[index+1]
-    oper2 = instructions[index+2]
+    noun = instructions[index+1]
+    verb = instructions[index+2]
     dest = instructions[index+3]
-    instructions[dest] = instructions[oper1] + instructions[oper2]
+    instructions[dest] = instructions[noun] + instructions[verb]
 
 
 def _multiply(index, instructions):
-    oper1 = instructions[index+1]
-    oper2 = instructions[index+2]
+    noun = instructions[index+1]
+    verb = instructions[index+2]
     dest = instructions[index+3]
-    instructions[dest] = instructions[oper1] * instructions[oper2]
+    instructions[dest] = instructions[noun] * instructions[verb]
+
+
+def _get_input():
+    with open('input') as fh:
+        return [int(inst) for inst in fh.readline().split(',')]
