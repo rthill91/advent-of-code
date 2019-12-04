@@ -1,4 +1,4 @@
-NUM ?= 03
+NUM ?= 04
 DAY := day-$(NUM)
 RUNNER := cd $(DAY) &&
 
