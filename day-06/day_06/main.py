@@ -1,3 +1,5 @@
+_HASHES = {}
+
 def part1():
     orbit_input = _get_input()
     orbits = _get_orbits(orbit_input)
@@ -9,7 +11,15 @@ def part1():
 
 
 def part2():
-    pass
+    orbit_input = _get_input()
+    orbits = _get_orbits(orbit_input)
+    you_path = _get_path('YOU', orbits)
+    san_path = _get_path('SAN', orbits)
+
+    while you_path.pop() == san_path.pop():
+        pass
+
+    print(len(you_path) + len(san_path) + 2)
 
 
 def _get_orbits(orbit_input):
@@ -25,14 +35,21 @@ def _get_orbit(entry):
     return center, satellite
 
 
-def _calculate_hash(satellite, orbits):
+def _calculate_hash(satellite, orbits, end=None):
     if not satellite:
         return -1
+    if satellite == end:
+        return 0
     return 1 + _calculate_hash(orbits.get(satellite), orbits)
+
+
+def _get_path(satellite, orbits):
+    path = []
+    while satellite := orbits.get(satellite):
+        path.append(satellite)
+    return path
 
 
 def _get_input():
     with open('input') as fh:
         return [line.strip() for line in fh.readlines()]
-    # return ['B)C', 'C)D', 'D)E', 'E)F', 'B)G', 'G)H', 'D)I', 'E)J', 'J)K', 'K)L', 'COM)B']
-    # return ['COM)B', 'B)C', 'C)D', 'D)E', 'E)F', 'B)G', 'G)H', 'D)I', 'E)J', 'J)K', 'K)L']
