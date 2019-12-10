@@ -64,22 +64,15 @@ class Computer:
             else:
                 self._index += inst_length
 
-
     def _add(self, modes):
-        noun = self._get_value(self._instructions[self._index+1], modes[-1])
-        verb = self._get_value(self._instructions[self._index+2], modes[-2])
-        dest = self._instructions[self._index+3]
+        noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
         self._instructions[dest] = noun + verb
         return 0
 
-
     def _multiply(self, modes):
-        noun = self._get_value(self._instructions[self._index+1], modes[-1])
-        verb = self._get_value(self._instructions[self._index+2], modes[-2])
-        dest = self._instructions[self._index+3]
+        noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
         self._instructions[dest] = noun * verb
         return 0
-
 
     def _input(self, modes):
         number = self._phase_signal_pair.pop(0)
@@ -87,51 +80,45 @@ class Computer:
         self._instructions[dest] = int(number)
         return 0
 
-
     def _output(self, modes):
         output_location = self._instructions[self._index+1]
         res = self._instructions[output_location]
         self._result.append(int(str(res)[-1]))
         return 0
 
-
     def _jump_if_true(self, modes):
-        noun = self._get_value(self._instructions[self._index+1], modes[-1])
-        verb = self._get_value(self._instructions[self._index+2], modes[-2])
+        noun, verb, _ = self._get_noun_verb_dest_tuple(modes)
         if noun != 0:
             return verb
         return 0
 
-
     def _jump_if_false(self, modes):
-        noun = self._get_value(self._instructions[self._index+1], modes[-1])
-        verb = self._get_value(self._instructions[self._index+2], modes[-2])
+        noun, verb, _ = self._get_noun_verb_dest_tuple(modes)
         if noun == 0:
             return verb
         return 0
 
-
     def _less_than(self, modes):
-        noun = self._get_value(self._instructions[self._index+1], modes[-1])
-        verb = self._get_value(self._instructions[self._index+2], modes[-2])
-        dest = self._instructions[self._index+3]
+        noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
         if noun < verb:
             self._instructions[dest] = 1
         else:
             self._instructions[dest] = 0
         return 0
 
-
     def _equals(self, modes):
-        noun = self._get_value(self._instructions[self._index+1], modes[-1])
-        verb = self._get_value(self._instructions[self._index+2], modes[-2])
-        dest = self._instructions[self._index+3]
+        noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
         if noun == verb:
             self._instructions[dest] = 1
         else:
             self._instructions[dest] = 0
         return 0
 
+    def _get_noun_verb_dest_tuple(self, modes):
+        noun = self._get_value(self._instructions[self._index+1], modes[-1])
+        verb = self._get_value(self._instructions[self._index+2], modes[-2])
+        dest = self._instructions[self._index+3]
+        return (noun, verb, dest)
 
     def _get_value(self, value, mode):
         if mode == "0":
