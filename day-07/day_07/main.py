@@ -12,7 +12,7 @@ def part1():
         for i in [int(i) for i in phase]:
             computer.reset_state([i, prior_result])
             computer.compute()
-            prior_result = computer._result[-1]
+            prior_result = computer.result
 
         highest = max(computer.result, highest)
 
@@ -36,12 +36,8 @@ class Computer:
             '07': (self._less_than, 4),
             '08': (self._equals, 4),
         }
-        self._result = []
+        self.result = 0
         self.reset_state(phase_signal_pair)
-
-    @property
-    def result(self):
-        return int(''.join([str(i) for i in self._result]))
 
     def reset_state(self, phase_signal_pair):
         self._instructions = copy.copy(self._initial_instructions)
@@ -83,7 +79,7 @@ class Computer:
     def _output(self, modes):
         output_location = self._instructions[self._index+1]
         res = self._instructions[output_location]
-        self._result.append(int(str(res)[-1]))
+        self.result = res
         return 0
 
     def _jump_if_true(self, modes):
