@@ -1,5 +1,10 @@
 import copy
 import itertools
+import logging
+
+
+logging.basicConfig(level=logging.CRITICAL)
+LOGGER = logging.getLogger(__name__)
 
 
 def part1():
@@ -7,12 +12,10 @@ def part1():
 
     highest = 0
     for phase in itertools.permutations(list("01234")):
-        computer = Computer(instructions, [])
-        prior_result = 0
+        computer = Computer('computer', instructions, [])
         for i in [int(i) for i in phase]:
-            computer.reset_state([i, prior_result])
+            computer.reset_state([i, computer.result])
             computer.compute()
-            prior_result = computer.result
 
         highest = max(computer.result, highest)
 
@@ -20,11 +23,36 @@ def part1():
 
 
 def part2():
-    pass
+    instructions = _get_input()
+
+    highest = 0
+    for phase in itertools.permutations(list("56789")):
+        phase_list = [int(i) for i in phase]
+
+        computer_a = Computer("A", instructions, [phase_list[0]])
+        computer_b = Computer("B", instructions, [phase_list[1]])
+        computer_c = Computer("C", instructions, [phase_list[2]])
+        computer_d = Computer("D", instructions, [phase_list[3]])
+        computer_e = Computer("E", instructions, [phase_list[4]])
+        computers = [computer_a, computer_b, computer_c, computer_d, computer_e]
+        for _ in itertools.cycle(range(5)):
+            computer = computers.pop(0)
+            LOGGER.debug(f'{computer._phase_signal_pair=}')
+            computer.add_inputs([computers[-1].result])
+            LOGGER.debug(f'{computer._phase_signal_pair=}')
+            is_done = computer.compute()
+            if computer.name == 'E' and is_done:
+                highest = max(highest, computer.result)
+                break
+            computers.append(computer)
+            LOGGER.debug(f'{computer.result=}')
+    print(highest)
 
 
 class Computer:
-    def __init__(self, instructions, phase_signal_pair):
+    def __init__(self, name, instructions, phase_signal_pair):
+        self.name = name
+        self._logger = logging.getLogger(__name__)
         self._initial_instructions = instructions
         self.opcodes = {
             '01': (self._add, 4),
@@ -39,6 +67,9 @@ class Computer:
         self.result = 0
         self.reset_state(phase_signal_pair)
 
+    def add_inputs(self, inputs):
+        self._phase_signal_pair.extend(inputs)
+
     def reset_state(self, phase_signal_pair):
         self._instructions = copy.copy(self._initial_instructions)
         self._phase_signal_pair = phase_signal_pair
@@ -51,9 +82,12 @@ class Computer:
             operation = inst[-2:]
             modes = inst[:-2]
             if operation == '99':
-                break
+                return True
             op, inst_length = self.opcodes.get(operation, None)
             modes = modes.zfill(inst_length)
+
+            if self._should_wait_for_input(op):
+                return False
             new_index = op(modes)
             if new_index > 0:
                 self._index = new_index
@@ -62,28 +96,33 @@ class Computer:
 
     def _add(self, modes):
         noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
+        self._logger.debug(f'Add: {noun}+{verb}=>{dest}')
         self._instructions[dest] = noun + verb
         return 0
 
     def _multiply(self, modes):
         noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
+        self._logger.debug(f'Multiply: {noun}*{verb}=>{dest}')
         self._instructions[dest] = noun * verb
         return 0
 
     def _input(self, modes):
         number = self._phase_signal_pair.pop(0)
         dest = self._instructions[self._index+1]
+        self._logger.debug(f'Input: {number}=>{dest}')
         self._instructions[dest] = int(number)
         return 0
 
     def _output(self, modes):
         output_location = self._instructions[self._index+1]
         res = self._instructions[output_location]
+        self._logger.debug(f'Output: {output_location}=>{res}')
         self.result = res
         return 0
 
     def _jump_if_true(self, modes):
         noun, verb, _ = self._get_noun_verb_dest_tuple(modes)
+        self._logger.debug(f'Jump If True: {verb > 0}')
         if noun != 0:
             return verb
         return 0
@@ -96,6 +135,7 @@ class Computer:
 
     def _less_than(self, modes):
         noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
+        self._logger.debug(f'Jump If False: {verb == 0}')
         if noun < verb:
             self._instructions[dest] = 1
         else:
@@ -104,6 +144,7 @@ class Computer:
 
     def _equals(self, modes):
         noun, verb, dest = self._get_noun_verb_dest_tuple(modes)
+        self._logger.debug(f'Equals: {noun}=={verb}=>{dest}')
         if noun == verb:
             self._instructions[dest] = 1
         else:
@@ -120,6 +161,10 @@ class Computer:
         if mode == "0":
             return self._instructions[value]
         return value
+
+    def _should_wait_for_input(self, op):
+        return op == self._input and not self._phase_signal_pair
+
 
 
 def _get_input():
