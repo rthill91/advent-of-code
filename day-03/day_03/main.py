@@ -41,6 +41,8 @@ def part1():
         dist = origin.get_distance(p)
         if dist < shortest_dist:
             shortest_dist = dist
+
+    assert shortest_dist == 2180
     print(shortest_dist)
 
 
@@ -58,6 +60,8 @@ def part2():
         sum_dist = p1.i + p2.i
         if sum_dist < shortest_dist:
             shortest_dist = sum_dist
+
+    assert shortest_dist == 112316
     print(shortest_dist)
 
 

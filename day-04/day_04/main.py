@@ -4,6 +4,7 @@ def part1(lower='153517', upper='630395'):
         if len(set(num)) < 6 and int(num) <= int(upper) and int(num) >= int(lower):
             i += 1
 
+    assert i == 1729
     print(i)
 
 
@@ -20,6 +21,7 @@ def part2(lower='153517', upper='630395'):
         if len(num_set) < 6 and int(num) <= int(upper) and int(num) >= int(lower) and exactly_two_digits:
             i += 1
 
+    assert i == 1172
     print(i)
 
 

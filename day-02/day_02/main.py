@@ -25,6 +25,7 @@ def part1(instructions=None, noun=12, verb=2):
 
 
     if not part2:
+        assert instructions[0] == 11590668
         print(instructions[0])
     return instructions[0]
 
@@ -37,7 +38,9 @@ def part2():
         for verb in range(100):
             res = part1(copy.copy(instructions), noun, verb)
             if res == 19690720:
-                print(100 * noun + verb)
+                answer = 100 * noun + verb
+                assert answer == 2254
+                print(answer)
                 return
 
 

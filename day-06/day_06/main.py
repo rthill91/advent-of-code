@@ -7,6 +7,7 @@ def part1():
     for satellite in orbits:
         checksum += _calculate_hash(satellite, orbits)
 
+    assert checksum == 292387
     print(checksum)
 
 
@@ -19,7 +20,9 @@ def part2():
     while you_path.pop() == san_path.pop():
         pass
 
-    print(len(you_path) + len(san_path) + 2)
+    answer = len(you_path) + len(san_path) + 2
+    assert answer == 433
+    print(answer)
 
 
 def _get_orbits(orbit_input):

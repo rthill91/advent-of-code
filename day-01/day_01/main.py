@@ -18,6 +18,7 @@ def part2():
             line = fh.readline()
             fuel += _get_fuel(mass, True)
 
+    assert fuel == 5055835
     print(fuel)
 
 

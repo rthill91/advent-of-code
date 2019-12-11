@@ -4,7 +4,10 @@ def part1():
     layer = image[layer_index]
     ones = sum(line.count('1') for line in layer)
     twos = sum(line.count('2') for line in layer)
-    print(ones * twos)
+    answer = ones * twos
+
+    assert answer == 1965
+    print(answer)
 
 
 def part2():
@@ -20,13 +23,9 @@ def part2():
 
     for line in image:
         l = ''.join(line)
-        l = l.replace('0', 'X')
-        l = l.replace('1', ' ')
+        l = l.replace('1', '\u2587')
+        l = l.replace('0', ' ')
         print(l)
-
-
-
-
 
 
 def _get_layer_index_with_fewest_zeros(image):
