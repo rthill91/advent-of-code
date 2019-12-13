@@ -16,3 +16,7 @@ def part1():
 
 def part2():
     instructions = get_input('input/day9', transform=int, delim=',')
+    computer = Intcode('main', instructions, [2])
+    computer.compute()
+    print(computer.result)
+    return computer.result
