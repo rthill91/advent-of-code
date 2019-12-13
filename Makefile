@@ -1,5 +1,5 @@
 YEAR = 2019
-DAY ?= 08
+DAY ?= 09
 RUNNER := cd "aoc$(YEAR)" &&
 POETRY_RUNNER := $(RUNNER) poetry run
 
