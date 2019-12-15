@@ -13,8 +13,7 @@ class Asteroid:
 
 
 def part1():
-    # asteroid_map = get_input('input/day10')
-    asteroid_map = get_input('sample_input')
+    asteroid_map = get_input('input/day10')
     asteroids = []
     for y, line in enumerate(asteroid_map):
         for x, element in enumerate(line):
@@ -27,6 +26,7 @@ def part1():
 
     best = max((a for a in asteroids), key=lambda a: a.detectable_count)
     print(best)
+    return best
 
 
 
@@ -45,21 +45,10 @@ def _calculate_visible_asteroids(station, asteroids):
 
 
 def _calculate_angle(p1, p2):
-    p3 = Asteroid(0, 0)
-
-    dist_point_1 = _get_distance(p2, p3)
-    dist_point_2 = _get_distance(p3, p1)
-    dist_point_3 = _get_distance(p1, p2)
-
-    angle = _get_angle(dist_point_1, dist_point_2, dist_point_3)
-    return round(angle, 10)
+    return math.atan2(p2.y - p1.y, p2.x - p1.x) * 180
 
 
 def _get_distance(p1, p2):
-    p1_x = Decimal(p1.x)
-    p2_y = Decimal(p1.y)
-    p1_x = Decimal(p2.x)
-    p2_y = Decimal(p2.y)
     return Decimal(math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2))
 
 
