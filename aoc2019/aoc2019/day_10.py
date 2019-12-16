@@ -21,7 +21,7 @@ def part1():
 
     best = max((a for a in asteroids), key=lambda a: a.detectable_count)
     print(best)
-    return best
+    return best.detectable_count
 
 
 
