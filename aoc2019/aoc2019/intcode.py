@@ -18,6 +18,7 @@ class Intcode:
             '07': (self._less_than, 4),
             '08': (self._equals, 4),
             '09': (self._relative_base_offset, 2),
+            '99': (self._halt, 0),
         }
         self.output_history = []
         self.result = 0
@@ -28,11 +29,11 @@ class Intcode:
 
     def reset_state(self, phase_signal_pair):
         self._logger.info(f"Resetting state of Intcode {self.name}")
-        # self._instructions = copy.copy(self._initial_instructions)
         self._instructions = self._create_memory_dict()
         self._phase_signal_pair = phase_signal_pair
         self._index = 0
         self._relative_offset = 0
+        self.is_running = True
 
     def _create_memory_dict(self):
         memory = dict()
@@ -41,18 +42,18 @@ class Intcode:
         return memory
 
     def compute(self):
-        while self._index < len(self._instructions):
+        while self.is_running:
+            self._logger.debug(f'{self._index=}')
             inst = self._instructions.get(self._index, 0)
             inst = str(inst).zfill(4)
             operation = inst[-2:]
             modes = inst[:-2]
-            if operation == '99':
-                return True
             op, inst_length = self.opcodes.get(operation, None)
             modes = modes.zfill(inst_length)
 
             if self._should_wait_for_input(op):
-                return False
+                return
+
             new_index = op(modes)
             if new_index > -1:
                 self._index = new_index
@@ -123,6 +124,11 @@ class Intcode:
         noun, = self._get_parameter_tuple(modes, size=1)
         self._relative_offset += noun
         self._logger.debug(f'Relative Base Offset: {noun} => {self._relative_offset}')
+        return -1
+
+    def _halt(self, modes):
+        self._logger.info(f'Halt')
+        self.is_running = False
         return -1
 
     def _get_parameter_tuple(self, modes, size, dest_index=None):

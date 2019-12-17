@@ -5,7 +5,6 @@ from ._common import get_input
 from .intcode import Intcode
 
 
-logging.basicConfig(level=logging.CRITICAL)
 LOGGER = logging.getLogger(__name__)
 
 
@@ -43,8 +42,8 @@ def part2():
             LOGGER.debug(f'{computer._phase_signal_pair=}')
             computer.add_inputs([computers[-1].result])
             LOGGER.debug(f'{computer._phase_signal_pair=}')
-            is_done = computer.compute()
-            if computer.name == 'E' and is_done:
+            computer.compute()
+            if computer.name == 'E' and not computer.is_running:
                 highest = max(highest, computer.result)
                 break
             computers.append(computer)
