@@ -85,3 +85,11 @@ def test_day10_part2():
 
 def test_day11_part1():
     assert aoc2019.day_11.part1() == 2276
+
+
+def test_day12_part1():
+    assert aoc2019.day_12.part1() == 7202
+
+
+def test_day12_part2():
+    assert aoc2019.day_12.part2() == 537881600740876
