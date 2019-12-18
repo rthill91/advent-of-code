@@ -15,11 +15,9 @@ def part1(instructions=None, noun=12, verb=2):
     intcode.compute()
 
 
-    if part2:
-        return intcode._instructions[0]
-
-    print(intcode._instructions[0])
-    return intcode._instructions[0]
+    if not part2:
+        print(intcode._memory[0])
+    return intcode._memory[0]
 
 
 def part2():

@@ -1,8 +1,8 @@
 YEAR = 2019
-DAY ?= 12
+DAY ?= 13
 RUNNER := cd "aoc$(YEAR)" &&
 POETRY_RUNNER := $(RUNNER) poetry run
-INTCODE_DAYS = "day02 or day05 or day07 or day09"
+INTCODE_DAYS = "day02 or day05 or day07 or day09 or day11"
 
 .PHONY: run
 run: part1 part2

@@ -26,6 +26,7 @@ def part2():
 
     lowest = lcm(x_steps, y_steps, z_steps)
     print(lowest)
+    return lowest
 
 
 def time_step(moons, updates=None):

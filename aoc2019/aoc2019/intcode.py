@@ -29,7 +29,7 @@ class Intcode:
 
     def reset_state(self, phase_signal_pair):
         self._logger.info(f"Resetting state of Intcode {self.name}")
-        self._instructions = self._create_memory_dict()
+        self._memory = self._create_memory_dict()
         self._phase_signal_pair = phase_signal_pair
         self._index = 0
         self._relative_offset = 0
@@ -44,7 +44,7 @@ class Intcode:
     def compute(self):
         while self.is_running:
             self._logger.debug(f'{self._index=}')
-            inst = self._instructions.get(self._index, 0)
+            inst = self._memory.get(self._index, 0)
             inst = str(inst).zfill(4)
             operation = inst[-2:]
             modes = inst[:-2]
@@ -63,20 +63,20 @@ class Intcode:
     def _add(self, modes):
         noun, verb, dest = self._get_parameter_tuple(modes, size=3, dest_index=2)
         self._logger.debug(f'Add: {noun}+{verb}=>{dest}')
-        self._instructions[dest] = noun + verb
+        self._memory[dest] = noun + verb
         return -1
 
     def _multiply(self, modes):
         noun, verb, dest = self._get_parameter_tuple(modes, size=3, dest_index=2)
         self._logger.debug(f'Multiply: {noun}*{verb}=>{dest}')
-        self._instructions[dest] = noun * verb
+        self._memory[dest] = noun * verb
         return -1
 
     def _input(self, modes):
         number = self._phase_signal_pair.pop(0)
         dest, = self._get_parameter_tuple(modes, size=1, dest_index=0)
         self._logger.debug(f'Input: {number}=>{dest}')
-        self._instructions[dest] = int(number)
+        self._memory[dest] = int(number)
         return -1
 
     def _output(self, modes):
@@ -106,18 +106,18 @@ class Intcode:
         noun, verb, dest = self._get_parameter_tuple(modes, size=3, dest_index=2)
         self._logger.debug(f'Jump If False: {verb == 0}')
         if noun < verb:
-            self._instructions[dest] = 1
+            self._memory[dest] = 1
         else:
-            self._instructions[dest] = 0
+            self._memory[dest] = 0
         return -1
 
     def _equals(self, modes):
         noun, verb, dest = self._get_parameter_tuple(modes, size=3, dest_index=2)
         self._logger.debug(f'Equals: {noun}=={verb}=>{dest}')
         if noun == verb:
-            self._instructions[dest] = 1
+            self._memory[dest] = 1
         else:
-            self._instructions[dest] = 0
+            self._memory[dest] = 0
         return -1
 
     def _relative_base_offset(self, modes):
@@ -134,7 +134,7 @@ class Intcode:
     def _get_parameter_tuple(self, modes, size, dest_index=None):
         params = []
         for i in range(size):
-            value = self._instructions.get(self._index+i+1, 0)
+            value = self._memory.get(self._index+i+1, 0)
             param = self._get_value(value, modes[i*-1-1], i == dest_index)
             params.append(param)
         return tuple(params)
@@ -143,13 +143,13 @@ class Intcode:
         if mode == "0":  # position
             if is_dest:
                 return value
-            return self._instructions.get(value, 0)
+            return self._memory.get(value, 0)
         if mode == "1":  # immediate
             return value
         if mode == "2":  # relative
             if is_dest:
                 return value + self._relative_offset
-            return self._instructions.get(value + self._relative_offset, 0)
+            return self._memory.get(value + self._relative_offset, 0)
         raise Exception(f"Invalid Mode {mode}")
 
     def _should_wait_for_input(self, op):

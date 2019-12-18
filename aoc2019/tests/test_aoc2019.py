@@ -1,4 +1,5 @@
 import aoc2019
+import pytest
 
 
 def test_day01_get_fuel():
@@ -93,3 +94,133 @@ def test_day12_part1():
 
 def test_day12_part2():
     assert aoc2019.day_12.part2() == 537881600740876
+
+
+@pytest.mark.skip
+def test_day13_part1():
+    assert aoc2019.day_13.part1() == None
+
+
+@pytest.mark.skip
+def test_day13_part2():
+    assert aoc2019.day_13.part2() == None
+
+
+@pytest.mark.skip
+def test_day14_part1():
+    assert aoc2019.day_14.part1() == None
+
+
+@pytest.mark.skip
+def test_day14_part2():
+    assert aoc2019.day_14.part2() == None
+
+
+@pytest.mark.skip
+def test_day15_part1():
+    assert aoc2019.day_15.part1() == None
+
+
+@pytest.mark.skip
+def test_day15_part2():
+    assert aoc2019.day_15.part2() == None
+
+
+@pytest.mark.skip
+def test_day16_part1():
+    assert aoc2019.day_16.part1() == None
+
+
+@pytest.mark.skip
+def test_day16_part2():
+    assert aoc2019.day_16.part2() == None
+
+
+@pytest.mark.skip
+def test_day17_part1():
+    assert aoc2019.day_17.part1() == None
+
+
+@pytest.mark.skip
+def test_day17_part2():
+    assert aoc2019.day_17.part2() == None
+
+
+@pytest.mark.skip
+def test_day18_part1():
+    assert aoc2019.day_18.part1() == None
+
+
+@pytest.mark.skip
+def test_day18_part2():
+    assert aoc2019.day_18.part2() == None
+
+
+@pytest.mark.skip
+def test_day19_part1():
+    assert aoc2019.day_19.part1() == None
+
+
+@pytest.mark.skip
+def test_day19_part2():
+    assert aoc2019.day_19.part2() == None
+
+
+@pytest.mark.skip
+def test_day20_part1():
+    assert aoc2019.day_20.part1() == None
+
+
+@pytest.mark.skip
+def test_day20_part2():
+    assert aoc2019.day_20.part2() == None
+
+
+@pytest.mark.skip
+def test_day21_part1():
+    assert aoc2019.day_21.part1() == None
+
+
+@pytest.mark.skip
+def test_day21_part2():
+    assert aoc2019.day_21.part2() == None
+
+
+@pytest.mark.skip
+def test_day22_part1():
+    assert aoc2019.day_22.part1() == None
+
+
+@pytest.mark.skip
+def test_day22_part2():
+    assert aoc2019.day_22.part2() == None
+
+
+@pytest.mark.skip
+def test_day23_part1():
+    assert aoc2019.day_23.part1() == None
+
+
+@pytest.mark.skip
+def test_day23_part2():
+    assert aoc2019.day_23.part2() == None
+
+
+@pytest.mark.skip
+def test_day24_part1():
+    assert aoc2019.day_24.part1() == None
+
+
+@pytest.mark.skip
+def test_day24_part2():
+    assert aoc2019.day_24.part2() == None
+
+
+@pytest.mark.skip
+def test_day25_part1():
+    assert aoc2019.day_25.part1() == None
+
+
+@pytest.mark.skip
+def test_day25_part2():
+    assert aoc2019.day_25.part2() == None
