@@ -4,7 +4,7 @@ import logging
 
 
 class Intcode:
-    def __init__(self, name, instructions, phase_signal_pair):
+    def __init__(self, name, instructions, phase_signal_pair=None):
         self.name = name
         self._logger = logging.getLogger(__name__)
         self._initial_instructions = instructions
@@ -27,7 +27,9 @@ class Intcode:
     def add_inputs(self, inputs):
         self._phase_signal_pair.extend(inputs)
 
-    def reset_state(self, phase_signal_pair):
+    def reset_state(self, phase_signal_pair=None):
+        if not phase_signal_pair:
+            phase_signal_pair = []
         self._logger.info(f"Resetting state of Intcode {self.name}")
         self._memory = self._create_memory_dict()
         self._phase_signal_pair = phase_signal_pair

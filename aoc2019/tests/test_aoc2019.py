@@ -96,14 +96,8 @@ def test_day12_part2():
     assert aoc2019.day_12.part2() == 537881600740876
 
 
-@pytest.mark.skip
 def test_day13_part1():
-    assert aoc2019.day_13.part1() == None
-
-
-@pytest.mark.skip
-def test_day13_part2():
-    assert aoc2019.day_13.part2() == None
+    assert aoc2019.day_13.part1() == 233
 
 
 @pytest.mark.skip
